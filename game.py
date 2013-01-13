@@ -46,7 +46,7 @@ if __name__ == '__main__':
 	units = []
 	for i in range(NUM_UNITS):
 		units.append(Unit(screen,
-						  0,
+						  3,
 						  (	randint(0, SCREEN_WIDTH),
 							randint(0, SCREEN_HEIGHT)),
 						  (	choice([-1, 1]),
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 		#begin actual stuff here
 		ret, im = cap.read()
 		gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-		flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 1, 3, 1, 3, 5, 1)
+		flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 1, 3, 2, 3, 5, 1)
 		prev_gray = gray
 		if cv2.waitKey(10) == 27:
 			break

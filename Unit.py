@@ -4,11 +4,14 @@ from pygame.sprite import Sprite
 from random import randint, choice
 from vec2d import *
 
-FLOW_FACTOR = 0.01 #how much we're affected by flow
+FLOW_FACTOR = 0.05 #how much we're affected by flow
 UNITTYPES = [{"img" : "triship.png"},
 			 {"img" : "quadship.png"},
 			 {"img" : "quintship.png"},
 			 {"img" : "sextship.png"}]
+
+def sigmoid(x):
+	return ((1 / 1 + numpy.exp(-x / 500)) - 0.5)
 
 class Unit(Sprite):
 	def __init__(self, screen, unitType, initPosition, initDirection, speed):
@@ -20,7 +23,7 @@ class Unit(Sprite):
 		self.base_image = pygame.image.load(UNITTYPES[unitType]["img"]).convert_alpha()
 		self.image = self.base_image
 		self.size = self.image.get_size()
-		self.flow = vec2d(0, 0)
+		self.flow = numpy.array([0, 0])
 
 	def update(self, time_passed, flowMat):
 		"""The unit owns the flow calculations"""
@@ -30,12 +33,11 @@ class Unit(Sprite):
 		displacement = vec2d(
 				self.direction.x * self.speed * time_passed,
 				self.direction.y * self.speed * time_passed)
-		displacement += (self.flow * FLOW_FACTOR)
+		displacement += (self.flow)
 		self.pos += displacement
 		self.pos[0] = int(self.pos[0])
 		self.pos[1] = int(self.pos[1])
-		self.flow += numpy.sum(numpy.sum(flowMat, axis=0), axis=1)
-		print self.flow
+		self.flow = FLOW_FACTOR * sigmoid(numpy.sum(numpy.sum(flowMat, axis=0), axis=0))
 
 		self.image_w, self.image_h = self.image.get_size()
 		bounds_rect = self.screen.get_rect().inflate(
