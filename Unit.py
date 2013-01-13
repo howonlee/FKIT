@@ -10,10 +10,11 @@ DECEL_FACTOR = 0.7 #how much we go towards equilibrium
 NAT_ACCEL = 0.09#how much we accelerate naturally
 ININC_TIME = 700 #how much we are invincible for at the start
 EQUIB_POINT = (0.1, 0.1) #the speed we go towards
-UNITTYPES = [{"img" : "triship.png"},
-			 {"img" : "quadship.png"},
+DIST_THRESH = 10 #how close do you have to be to one of the goals
+UNITTYPES = [{"img" : "sextship.png"},
 			 {"img" : "quintship.png"},
-			 {"img" : "sextship.png"}]
+			 {"img" : "quadship.png"},
+			 {"img" : "triship.png"}]
 
 class Unit(Sprite):
 	def __init__(self, screen, unitType, initPosition, initDirection, speed, targetList):
@@ -26,9 +27,10 @@ class Unit(Sprite):
 		self.base_image = pygame.image.load(UNITTYPES[unitType]["img"]).convert_alpha()
 		self.image = self.base_image
 		self.size = self.image.get_size()
+		self.rect = pygame.Rect(initPosition, self.size)
 		self.flow = numpy.array([0, 0])
 		self.targetList = targetList
-		self.entered = False
+		self.currTarget = self.targetList[0]
 
 	def update(self, time_passed, flowMat):
 		"""The unit owns the flow calculations"""
@@ -40,6 +42,7 @@ class Unit(Sprite):
 				self.direction.x * self.speed.x * time_passed,
 				self.direction.y * self.speed.y * time_passed)
 		self.pos += displacement
+		self.rect.move(displacement[0], displacement[1])
 		self.flow = FLOW_FACTOR * numpy.sum(numpy.sum(flowMat, axis=0), axis=0)
 		print self.flow
 		#acceleration
@@ -52,8 +55,7 @@ class Unit(Sprite):
 			self.speed += NAT_ACCEL
 		self.pos[0] = int(self.pos[0])
 		self.pos[1] = int(self.pos[1])
-		if (self.entered):
-			self._checkbounds()
+		self._checkbounds()
 
 
 	def blitme(self):

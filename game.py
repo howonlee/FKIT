@@ -21,6 +21,13 @@ def change_stage(gameState):
 	gameState["currTime"] = STAGES[currStage]["time"]
 	pygame.time.set_timer(SPAWN_EVENT, gameState["currTime"])
 
+def check_collision():
+	"""checks for collision between units and star"""
+	global star, units
+	for unit in units:
+		if (pygame.sprite.collide_rect(star, unit)):
+			lose_life(unit, gameState)
+
 def lose_life(unit, gameState):
 	unit.die()
 	gameState["numLives"] -= 1
@@ -51,6 +58,15 @@ def draw_flow(im, flow, step=32):
 def make_star():
 	global star
 	star = Star(screen, STAR_POS, "star.png")
+
+def spawn_unit(gameState):
+	global units
+	print "spawn"
+	print "currStage", gameState["currStage"]
+	print "numUnits", gameState["numUnits"]
+	units.append(Unit(screen, gameState["currStage"], choice(gameState["currSpawn"]), (0,0), (0.1,0.1), gameState["currPath"]))
+	gameState["numUnits"] -= 1
+
 
 if __name__ == '__main__':
 
@@ -84,15 +100,12 @@ if __name__ == '__main__':
 	pygame.time.set_timer(SPAWN_EVENT, gameState["currTime"])
 
 	while True:
+		#event handling
 		timePassed = fpsClock.tick(60)
 		for event in pygame.event.get():
 			if event.type == SPAWN_EVENT:
 				if (gameState["numUnits"] >= 0):
-					print "spawn"
-					print "currStage", gameState["currStage"]
-					print "numUnits", gameState["numUnits"]
-					units.append(Unit(screen, gameState["currStage"], (200,200), (0,0), (0,0), gameState["currPath"]))
-					gameState["numUnits"] -= 1
+					spawn_unit(gameState)
 				else:
 					if (len(units) == 0): #wait for them to clear stage
 						change_stage(gameState)
@@ -113,6 +126,7 @@ if __name__ == '__main__':
 		pgVisRect = pgVis.get_rect()
 		screen.blit(pgVis, pgVisRect)
 		star.blitme()
+		check_collision()
 		for unit in units:
 			step = 4
 			top = min(unit.pos[1] + (unit.size[1] / 2), SCREEN_HEIGHT)

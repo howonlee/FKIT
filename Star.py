@@ -8,6 +8,7 @@ class Star(Sprite):
 		self.screen = screen
 		self.pos = vec2d(pos)
 		self.image = pygame.image.load(image).convert_alpha()
+		self.rect = pygame.Rect(pos, (self.image.get_width(), self.image.get_height()))
 
 	def blitme(self):
 		self.screen.blit(self.image, self.pos)
