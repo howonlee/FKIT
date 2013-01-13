@@ -2,6 +2,13 @@ import cv2, pygame, sys
 import cv2.cv as cv
 from pygame.locals import *
 from numpy import *
+from random import randint, choice
+from math import * #pollute that namespace, baby
+from Unit import *
+
+
+NUM_UNITS = 5
+NUM_CREEPS = 5
 
 def draw_flow(im, flow, step=16):
 	"""Plot optical flow"""
@@ -30,10 +37,24 @@ if __name__ == '__main__':
 	#pygame init
 	pygame.init()
 	fpsClock = pygame.time.Clock()
-	windowSurfaceObj = pygame.display.set_mode((im.shape[1], im.shape[0]))#this is a bit of a mysterious hack
+	SCREEN_WIDTH, SCREEN_HEIGHT = im.shape[1], im.shape[0]#this is a bit of a mysterious hack
+	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	pygame.display.set_caption("FKIT")
 
+	#game init
+	units = []
+	for i in range(NUM_UNITS):
+		units.append(Unit(screen,
+						  0,
+						  (	randint(0, SCREEN_WIDTH),
+							randint(0, SCREEN_HEIGHT)),
+						  (	choice([-1, 1]),
+							choice([-1, 1])),
+						  0.1))
+
+
 	while True:
+		timePassed = fpsClock.tick(60)
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				pygame.quit()
@@ -48,6 +69,8 @@ if __name__ == '__main__':
 		pgVis = pygame.surfarray.make_surface(draw_flow(gray, flow))
 		pgVis = pygame.transform.rotate(pgVis, 270)
 		pgVisRect = pgVis.get_rect()
-		windowSurfaceObj.blit(pgVis, pgVisRect)
+		screen.blit(pgVis, pgVisRect)
+		for unit in units:
+			unit.update(timePassed)
+			unit.blitme()
 		pygame.display.update()
-		fpsClock.tick(60)
