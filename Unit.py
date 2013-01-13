@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 from random import randint, choice
 from vec2d import *
 
-FLOW_FACTOR = 0.05 #how much we're affected by flow
+FLOW_FACTOR = 1 #how much we're affected by flow
 UNITTYPES = [{"img" : "triship.png"},
 			 {"img" : "quadship.png"},
 			 {"img" : "quintship.png"},
@@ -37,7 +37,7 @@ class Unit(Sprite):
 		self.pos += displacement
 		self.pos[0] = int(self.pos[0])
 		self.pos[1] = int(self.pos[1])
-		self.flow = FLOW_FACTOR * sigmoid(numpy.sum(numpy.sum(flowMat, axis=0), axis=0))
+		self.flow = FLOW_FACTOR * numpy.sum(numpy.sum(flowMat, axis=0), axis=0)
 
 		self.image_w, self.image_h = self.image.get_size()
 		bounds_rect = self.screen.get_rect().inflate(
@@ -56,6 +56,8 @@ class Unit(Sprite):
 			self.direction.y *= -1
 
 	def blitme(self):
+		print self.pos
+		print self.image_h
 		draw_pos = self.image.get_rect().move(
 				self.pos.x - self.image_w / 2,
 				self.pos.y - self.image_h / 2)
