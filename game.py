@@ -64,7 +64,7 @@ def spawn_unit(gameState):
 	print "spawn"
 	print "currStage", gameState["currStage"]
 	print "numUnits", gameState["numUnits"]
-	units.append(Unit(screen, gameState["currStage"], choice(gameState["currSpawn"]), (0,0), (0.1,0.1), gameState["currPath"]))
+	units.append(Unit(screen, gameState["currStage"], choice(gameState["currSpawn"]), (0, 0), (0.1,0.1), gameState["currPath"]))
 	gameState["numUnits"] -= 1
 
 

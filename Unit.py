@@ -11,6 +11,7 @@ NAT_ACCEL = 0.09#how much we accelerate naturally
 ININC_TIME = 700 #how much we are invincible for at the start
 EQUIB_POINT = (0.1, 0.1) #the speed we go towards
 DIST_THRESH = 10 #how close do you have to be to one of the goals
+STAR_POS = (310, 230)
 UNITTYPES = [{"img" : "sextship.png"},
 			 {"img" : "quintship.png"},
 			 {"img" : "quadship.png"},
@@ -36,6 +37,7 @@ class Unit(Sprite):
 		"""The unit owns the flow calculations"""
 		#movement
 		self._change_direction(time_passed)
+		self._checkTarget()
 		self.image = pygame.transform.rotate(self.base_image, -self.direction.angle)
 		self.size = self.image.get_size()
 		displacement = vec2d(
@@ -85,6 +87,17 @@ class Unit(Sprite):
 
 	def _change_direction(self, time_passed):
 		self._counter += time_passed
-		if self._counter > randint(1600, 1750):
-			self.direction.rotate(randint(-45, 45))
+		if self._counter > randint(100, 150):
+			self.direction.x = 1
+			self.direction.y = 0
+			self.direction.length
+			self.direction.rotate(self.direction.get_angle_between(self.currTarget))
 			self._counter = 0
+
+	def _checkTarget(self):
+		if self.pos.get_distance(self.currTarget) < 5:
+			self.targetList.pop(0)
+			if (self.targetList):
+				self.currTarget = self.targetList[0]
+			else:
+				self.currTarget = STAR_POS
