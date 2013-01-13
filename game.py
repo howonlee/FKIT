@@ -12,11 +12,11 @@ def draw_flow(im, flow, step=16):
 	lines = vstack([x, y, x+fx, y+fy]).T.reshape(-1, 2, 2)
 	lines = int32(lines)
 
+	vis = cv.CreateMat(im.shape[0], im.shape[1], cv.CV_8UC3)
 	#vis = cv2.cvtColor(im, cv2.COLOR_GRAY2BGR)
-	vis = zeros((im.shape[0], im.shape[1], 3))
+	#vis = zeros((im.shape[0], im.shape[1], 3))
 	for (x1, y1), (x2, y2) in lines:
-		cv2.line(vis, (x1, y1), (x2, y2), (255, 255, 255), 1)
-		cv2.circle(vis, (x1, y1), 1, (255,255,255), -1)
+		cv.Line(vis, (x1, y1), (x2, y2), (255, 255, 255), 1)
 	#print vis
 	return vis
 
@@ -38,11 +38,8 @@ if __name__ == '__main__':
 		gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 		flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 1, 3, 1, 3, 5, 1)
 		prev_gray = gray
-		vis = cv.fromarray(draw_flow(gray, flow)).convertTo(cv.CV_8UC3)
-		vis_rgb = cv.CreateMat(vis.height, vis.width, cv.CV_8UC3)
-		print vis_rgb.depth()
-		cv.CvtColor(vis, vis_rgb, cv.CV_BGR2RGB)
-		pgVis = pygame.image.frombuffer(vis_rgb.tostring(), cv.GetSize(vis_rgb), "RGB")
+		vis = draw_flow(gray, flow)
+		pgVis = pygame.image.frombuffer(vis.tostring(), cv.GetSize(vis), "RGB")
 		windowSurfaceObj.blit(pgVis, (0,0))
 		for event in pygame.event.get():
 			if event.type == QUIT:
