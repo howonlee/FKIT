@@ -17,7 +17,7 @@ class Unit(Sprite):
 		Sprite.__init__(self)
 		self.isDead = False
 		self.screen = screen
-		self.speed = speed
+		self.speed = vec2d(speed)
 		self.pos = vec2d(initPosition)
 		self.direction = vec2d(initDirection).normalized()
 		self.base_image = pygame.image.load(UNITTYPES[unitType]["img"]).convert_alpha()
@@ -35,14 +35,15 @@ class Unit(Sprite):
 		self._change_direction(time_passed)
 		self._checkTarget()
 		displacement = vec2d(
-				self.direction.x * self.speed * time_passed,
-				self.direction.y * self.speed * time_passed)
+				self.direction.x * self.speed.x * time_passed,
+				self.direction.y * self.speed.y * time_passed)
 		self.pos += displacement
 		self.flow = numpy.sum(numpy.sum(flowMat, axis=0), axis=0)
-		print self.flow
-		self.pos += (self.flow)
-		#self.acc *= 0.9
-		#self.speed += (0.0005 * self.acc)
+		self.speed += vec2d(self.flow)
+		if self.speed.x > 0.2:
+			self.speed.x = 0.2
+		if self.speed.y > 0.2:
+			self.speed.y = 0.2
 		#if self.speed > 0.1:
 		#	self.speed *= 0.9
 		#if self.speed < 0.1:
@@ -62,7 +63,7 @@ class Unit(Sprite):
 		"""this is a bit of a sop"""
 		if (self.isDead): return
 		self.pos = (-1000, -1000)
-		self.speed = 0
+		self.speed = vec2d(0, 0)
 		self.isDead = True
 
 	#private
@@ -71,8 +72,7 @@ class Unit(Sprite):
 	def _checkbounds(self):
 		if (self.isDead): return
 		self.image_w, self.image_h = self.image.get_size()
-		bounds_rect = self.screen.get_rect().inflate(
-							-self.image_w, -self.image_h)
+		bounds_rect = self.screen.get_rect()
 		if self.pos.x < bounds_rect.left:
 			self.die()
 		elif self.pos.x > bounds_rect.right:

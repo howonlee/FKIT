@@ -64,7 +64,7 @@ def spawn_unit(gameState):
 	print "spawn"
 	print "currStage", gameState["currStage"]
 	print "numUnits", gameState["numUnits"]
-	units.append(Unit(screen, gameState["currStage"], choice(gameState["currSpawn"]), (1, -1), 0.1, gameState["currPath"]))
+	units.append(Unit(screen, gameState["currStage"], choice(gameState["currSpawn"]), (1, -1), (0.1, 0.1), gameState["currPath"]))
 	gameState["numUnits"] -= 1
 
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
 
 	while True:
 		#event handling
-		timePassed = fpsClock.tick(60)
+		timePassed = fpsClock.tick(120)
 		for event in pygame.event.get():
 			if event.type == SPAWN_EVENT:
 				if (gameState["numUnits"] >= 0):
@@ -141,7 +141,7 @@ if __name__ == '__main__':
 			left = max(unit.pos[0] - (unit.size[0] / 2), 0)
 			right = min(unit.pos[0] + (unit.size[0] / 2), SCREEN_WIDTH)
 			#print top, bottom, left, right
-			flowMat = flow[bottom:top:step, left:right:step,:] * 0.06
+			flowMat = flow[bottom:top:step, left:right:step,:] * 0.0007
 			#print unit.pos
 			unit.update(timePassed, flowMat)
 			unit.blitme()
