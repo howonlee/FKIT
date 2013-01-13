@@ -7,7 +7,7 @@ from math import * #pollute that namespace, baby
 from Unit import *
 
 
-NUM_UNITS = 5
+NUM_UNITS = 50
 NUM_CREEPS = 5
 
 def draw_flow(im, flow, step=16):
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 	units = []
 	for i in range(NUM_UNITS):
 		units.append(Unit(screen,
-						  0,
+						  randint(0, 3),
 						  (	randint(0, SCREEN_WIDTH),
 							randint(0, SCREEN_HEIGHT)),
 						  (	choice([-1, 1]),

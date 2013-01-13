@@ -3,7 +3,10 @@ from pygame.sprite import Sprite
 from random import randint, choice
 from vec2d import *
 
-UNITTYPES = [{"img" : "ball.png"}]
+UNITTYPES = [{"img" : "triship.png"},
+			 {"img" : "quadship.png"},
+			 {"img" : "quintship.png"},
+			 {"img" : "sextship.png"}]
 
 class Unit(Sprite):
 	def __init__(self, screen, unitType, initPosition, initDirection, speed):
