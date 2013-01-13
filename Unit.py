@@ -88,12 +88,11 @@ class Unit(Sprite):
 		if self._counter > randint(100, 150):
 			self.direction.x = 1
 			self.direction.y = 0
-			self.direction.length
-			self.direction.rotate(self.direction.get_angle_between(self.currTarget))
-			self._counter = 0
+			self.direction.length = 1
+			self.direction.rotate(2 * self.direction.get_angle_between(self.currTarget))
 
 	def _checkTarget(self):
-		if self.pos.get_distance(self.currTarget) < 5:
+		if self.pos.get_distance(self.currTarget) < 50:
 			self.targetList.pop(0)
 			print "targetList", self.targetList
 			if (self.targetList):

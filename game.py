@@ -113,6 +113,8 @@ if __name__ == '__main__':
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
 					end_game()
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				print "mouse pos: ", event.pos
 			if event.type == QUIT:
 				end_game()
 		#begin actual stuff here
