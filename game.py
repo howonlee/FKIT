@@ -7,7 +7,7 @@ from math import * #pollute that namespace, baby
 from Unit import *
 
 
-NUM_UNITS = 50
+NUM_UNITS = 5
 NUM_CREEPS = 5
 
 def draw_flow(im, flow, step=16):
@@ -15,6 +15,7 @@ def draw_flow(im, flow, step=16):
 	h, w = im.shape[:2]
 	y, x = mgrid[step/2:h:step, step/2:w:step].reshape(2, -1)
 	fx, fy = flow[y, x].T
+	#print flow.shape
 
 	lines = vstack([x, y, x+fx, y+fy]).T.reshape(-1, 2, 2)
 	lines = int32(lines)
@@ -45,7 +46,7 @@ if __name__ == '__main__':
 	units = []
 	for i in range(NUM_UNITS):
 		units.append(Unit(screen,
-						  randint(0, 3),
+						  0,
 						  (	randint(0, SCREEN_WIDTH),
 							randint(0, SCREEN_HEIGHT)),
 						  (	choice([-1, 1]),
@@ -71,6 +72,13 @@ if __name__ == '__main__':
 		pgVisRect = pgVis.get_rect()
 		screen.blit(pgVis, pgVisRect)
 		for unit in units:
-			unit.update(timePassed)
+			top = unit.pos[1] + (unit.size[1] / 2)
+			bottom = unit.pos[1] - (unit.size[1] / 2)
+			left = unit.pos[0] - (unit.size[0] / 2)
+			right = unit.pos[0] + (unit.size[0] / 2)
+			#print top, bottom, left, right
+			flowMat = flow[bottom:top, left:right,:]
+			#print unit.pos
+			unit.update(timePassed, flowMat)
 			unit.blitme()
 		pygame.display.update()
