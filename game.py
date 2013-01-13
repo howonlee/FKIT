@@ -19,16 +19,16 @@ def draw_flow(im, flow, step=16):
 	#print vis
 	return vis
 
-cap = cv2.VideoCapture(0)
-
-ret, im = cap.read()
-prev_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-
-while True:
+if __name__ == '__main__':
+	cap = cv2.VideoCapture(0)
 	ret, im = cap.read()
-	gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-	flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 1, 3, 1, 3, 5, 1)
-	prev_gray = gray
-	cv2.imshow('Optical Flow', draw_flow(gray, flow))
-	if cv2.waitKey(10) == 27:
-		break
+	prev_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+
+	while True:
+		ret, im = cap.read()
+		gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+		flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 1, 3, 1, 3, 5, 1)
+		prev_gray = gray
+		cv2.imshow('Optical Flow', draw_flow(gray, flow))
+		if cv2.waitKey(10) == 27:
+			break
