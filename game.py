@@ -10,7 +10,7 @@ from Unit import *
 NUM_UNITS = 5
 NUM_CREEPS = 5
 
-def draw_flow(im, flow, step=8):
+def draw_flow(im, flow, step=32):
 	"""Plot optical flow"""
 	h, w = im.shape[:2]
 	y, x = mgrid[step/2:h:step, step/2:w:step].reshape(2, -1)
@@ -21,8 +21,8 @@ def draw_flow(im, flow, step=8):
 	lines = int32(lines)
 
 	#vis = cv.CreateMat(im.shape[0], im.shape[1], cv.CV_8UC3)
-	#vis = cv2.cvtColor(im, cv2.COLOR_GRAY2BGR)
-	vis = zeros((im.shape[0], im.shape[1], 3))
+	vis = cv2.cvtColor(im, cv2.COLOR_GRAY2BGR)
+	#vis = zeros((im.shape[0], im.shape[1], 3))
 	for (x1, y1), (x2, y2) in lines:
 		cv2.line(vis, (x1, y1), (x2, y2), (255, 255, 255), 1)
 	return vis
@@ -39,30 +39,27 @@ if __name__ == '__main__':
 	pygame.init()
 	fpsClock = pygame.time.Clock()
 	SCREEN_WIDTH, SCREEN_HEIGHT = im.shape[1], im.shape[0]#this is a bit of a mysterious hack
+	#screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), (pygame.FULLSCREEN | pygame.HWSURFACE))
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	pygame.display.set_caption("FKIT")
 
 	#game init
 	units = []
-	for i in range(NUM_UNITS):
-		units.append(Unit(screen,
-						  1,
-						  (	randint(0, SCREEN_WIDTH),
-							randint(0, SCREEN_HEIGHT)),
-						  (	choice([-1, 1]),
-							choice([-1, 1])),
-						  (0.1, 0.1)))
-
 
 	while True:
 		timePassed = fpsClock.tick(60)
 		for event in pygame.event.get():
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					pygame.quit()
+					sys.exit()
 			if event.type == QUIT:
 				pygame.quit()
 				sys.exit()
 		#begin actual stuff here
 		ret, im = cap.read()
 		gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+		gray = cv2.equalizeHist(gray)
 		flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 2, 3, 2, 6, 1.1, 1)
 		prev_gray = gray
 		if cv2.waitKey(10) == 27:
@@ -73,10 +70,10 @@ if __name__ == '__main__':
 		screen.blit(pgVis, pgVisRect)
 		for unit in units:
 			step = 4
-			top = unit.pos[1] + (unit.size[1] / 2)
-			bottom = unit.pos[1] - (unit.size[1] / 2)
-			left = unit.pos[0] - (unit.size[0] / 2)
-			right = unit.pos[0] + (unit.size[0] / 2)
+			top = min(unit.pos[1] + (unit.size[1] / 2), SCREEN_HEIGHT)
+			bottom = max(unit.pos[1] - (unit.size[1] / 2), 0)
+			left = max(unit.pos[0] - (unit.size[0] / 2), 0)
+			right = min(unit.pos[0] + (unit.size[0] / 2), SCREEN_WIDTH)
 			#print top, bottom, left, right
 			flowMat = flow[bottom:top:step, left:right:step,:] * 0.1
 			#print unit.pos
