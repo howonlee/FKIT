@@ -22,7 +22,6 @@ class Unit(Sprite):
 		Sprite.__init__(self)
 		self.screen = screen
 		self.speed = vec2d(speed)
-		self.acc = vec2d(0, 0)
 		self.pos = vec2d(initPosition)
 		self.direction = vec2d(initDirection).normalized()
 		self.base_image = pygame.image.load(UNITTYPES[unitType]["img"]).convert_alpha()
@@ -46,19 +45,18 @@ class Unit(Sprite):
 		self.pos += displacement
 		self.rect.move(displacement[0], displacement[1])
 		self.flow = FLOW_FACTOR * numpy.sum(numpy.sum(flowMat, axis=0), axis=0)
-		print self.flow
+		#print self.flow
 		#acceleration
-		self.acc += (self.flow)
-		self.acc *= DECEL_FACTOR
-		self.speed += (ACC_FACTOR * self.acc)
+		#self.acc += (self.flow)
+		#self.acc *= DECEL_FACTOR
+		"""self.speed += (ACC_FACTOR * self.acc)
 		if self.speed > EQUIB_POINT:
 			self.speed *= DECEL_FACTOR
 		if self.speed < EQUIB_POINT:
-			self.speed += NAT_ACCEL
+			self.speed += NAT_ACCEL"""
 		self.pos[0] = int(self.pos[0])
 		self.pos[1] = int(self.pos[1])
 		self._checkbounds()
-
 
 	def blitme(self):
 		draw_pos = self.image.get_rect().move(
@@ -97,6 +95,7 @@ class Unit(Sprite):
 	def _checkTarget(self):
 		if self.pos.get_distance(self.currTarget) < 5:
 			self.targetList.pop(0)
+			print "targetList", self.targetList
 			if (self.targetList):
 				self.currTarget = self.targetList[0]
 			else:
