@@ -46,12 +46,12 @@ if __name__ == '__main__':
 	units = []
 	for i in range(NUM_UNITS):
 		units.append(Unit(screen,
-						  3,
+						  1,
 						  (	randint(0, SCREEN_WIDTH),
 							randint(0, SCREEN_HEIGHT)),
 						  (	choice([-1, 1]),
 							choice([-1, 1])),
-						  0.1))
+						  (0.1, 0.1)))
 
 
 	while True:
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 		#begin actual stuff here
 		ret, im = cap.read()
 		gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-		flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 1, 3, 2, 3, 5, 1)
+		flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 2, 3, 2, 6, 1.1, 1)
 		prev_gray = gray
 		if cv2.waitKey(10) == 27:
 			break
@@ -72,13 +72,13 @@ if __name__ == '__main__':
 		pgVisRect = pgVis.get_rect()
 		screen.blit(pgVis, pgVisRect)
 		for unit in units:
-			step = 32
+			step = 4
 			top = unit.pos[1] + (unit.size[1] / 2)
 			bottom = unit.pos[1] - (unit.size[1] / 2)
 			left = unit.pos[0] - (unit.size[0] / 2)
 			right = unit.pos[0] + (unit.size[0] / 2)
 			#print top, bottom, left, right
-			flowMat = flow[bottom:top:step, left:right:step,:]
+			flowMat = flow[bottom:top:step, left:right:step,:] * 0.1
 			#print unit.pos
 			unit.update(timePassed, flowMat)
 			unit.blitme()
