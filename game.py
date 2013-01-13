@@ -38,8 +38,10 @@ if __name__ == '__main__':
 		gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 		flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 1, 3, 1, 3, 5, 1)
 		prev_gray = gray
-		vis = cv.fromarray(draw_flow(gray, flow))
+		vis = cv.fromarray(draw_flow(gray, flow)).convertTo(cv.CV_8UC3)
 		vis_rgb = cv.CreateMat(vis.height, vis.width, cv.CV_8UC3)
+		print vis_rgb.depth()
+		cv.CvtColor(vis, vis_rgb, cv.CV_BGR2RGB)
 		pgVis = pygame.image.frombuffer(vis_rgb.tostring(), cv.GetSize(vis_rgb), "RGB")
 		windowSurfaceObj.blit(pgVis, (0,0))
 		for event in pygame.event.get():
