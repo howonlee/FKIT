@@ -40,7 +40,6 @@ if __name__ == '__main__':
 		prev_gray = gray
 		vis = cv.fromarray(draw_flow(gray, flow))
 		vis_rgb = cv.CreateMat(vis.height, vis.width, cv.CV_8UC3)
-		cv.CvtColor(vis, vis_rgb, cv.CV_BGR2RGB)
 		pgVis = pygame.image.frombuffer(vis_rgb.tostring(), cv.GetSize(vis_rgb), "RGB")
 		windowSurfaceObj.blit(pgVis, (0,0))
 		for event in pygame.event.get():
