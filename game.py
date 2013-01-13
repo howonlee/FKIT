@@ -10,21 +10,21 @@ from Star import *
 
 MAX_STAGES = 3
 
-def change_stage():
-	global currStage, numUnits, currPath, currSpawn, currTime
-	currStage += 1
-	if currStage > MAX_STAGES:
+def change_stage(gameState):
+	gameState["currStage"] += 1
+	currStage = gameState["currStage"] #just a local thing
+	if gameState["currStage"] > MAX_STAGES:
 		end_game()
-	numUnits = STAGES[currStage]["num"]
-	currPath = STAGES[currStage]["path"]
-	currSpawn = STAGES[currStage]["spawn"]
-	currTime = STAGES[currStage]["time"]
-	pygame.time.set_timer(SPAWN_EVENT, currTime)
+	gameState["numUnits"] = STAGES[currStage]["num"]
+	gameState["currPath"] = STAGES[currStage]["path"]
+	gameState["currSpawn"] = STAGES[currStage]["spawn"]
+	gameState["currTime"] = STAGES[currStage]["time"]
+	pygame.time.set_timer(SPAWN_EVENT, gameState["currTime"])
 
-def lose_life(unit):
+def lose_life(unit, gameState):
 	unit.die()
-	numLives -= 1
-	if numLives <= 0:
+	gameState["numLives"] -= 1
+	if gameState["numLives"] <= 0:
 		end_game()
 
 def end_game(gameoverscreen=False):
@@ -69,18 +69,19 @@ if __name__ == '__main__':
 	pygame.display.set_caption("FKIT")
 
 	#game init
-	numLives = 5000
+	gameState = {}
+	gameState["numLives"] = 5000
+	gameState["numUnits"] = -1
+	gameState["currStage"] = -1
+	gameState["currPath"] = []
+	gameState["currSpawn"] = []
+	gameState["currTime"] = 0
 	SPAWN_EVENT = 25
 	STAR_POS = (305, 225)#hardcoded cuz of 640x480.
-	numUnits = -1
-	currStage = -1 #start with negative one
-	currPath = []
-	currSpawn = []
-	currTime = 0
-	change_stage()
+	change_stage(gameState)
 	make_star()
 	units = []
-	pygame.time.set_timer(SPAWN_EVENT, currTime)
+	pygame.time.set_timer(SPAWN_EVENT, gameState["currTime"])
 
 	while True:
 		timePassed = fpsClock.tick(60)
@@ -93,7 +94,7 @@ if __name__ == '__main__':
 					numUnits -= 1
 				else:
 					if (len(units) == 0): #wait for them to clear stage
-						change_stage()
+						change_stage(gameState)
 					print "change stage"
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
