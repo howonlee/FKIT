@@ -87,11 +87,12 @@ if __name__ == '__main__':
 		timePassed = fpsClock.tick(60)
 		for event in pygame.event.get():
 			if event.type == SPAWN_EVENT:
-				if (numUnits >= 0):
+				if (gameState["numUnits"] >= 0):
 					print "spawn"
-					print currStage
-					print numUnits
-					numUnits -= 1
+					print "currStage", gameState["currStage"]
+					print "numUnits", gameState["numUnits"]
+					units.append(Unit(screen, gameState["currStage"], (200,200), (0,0), (0,0), gameState["currPath"]))
+					gameState["numUnits"] -= 1
 				else:
 					if (len(units) == 0): #wait for them to clear stage
 						change_stage(gameState)

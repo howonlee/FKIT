@@ -58,8 +58,8 @@ class Unit(Sprite):
 
 	def blitme(self):
 		draw_pos = self.image.get_rect().move(
-				self.pos.x - self.image_w / 2,
-				self.pos.y - self.image_h / 2)
+				self.pos.x - self.image.get_width() / 2,
+				self.pos.y - self.image.get_height() / 2)
 		self.screen.blit(self.image, draw_pos)
 
 	def die(self):
