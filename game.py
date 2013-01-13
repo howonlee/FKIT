@@ -30,7 +30,7 @@ if __name__ == '__main__':
 	#pygame init
 	pygame.init()
 	fpsClock = pygame.time.Clock()
-	windowSurfaceObj = pygame.display.set_mode((im.shape[1], im.shape[0]))
+	windowSurfaceObj = pygame.display.set_mode((im.shape[1], im.shape[0]))#this is a bit of a mysterious hack
 	pygame.display.set_caption("FKIT")
 
 	while True:
@@ -46,6 +46,7 @@ if __name__ == '__main__':
 		if cv2.waitKey(10) == 27:
 			break
 		pgVis = pygame.surfarray.make_surface(draw_flow(gray, flow))
+		pgVis = pygame.transform.rotate(pgVis, 270)
 		pgVisRect = pgVis.get_rect()
 		windowSurfaceObj.blit(pgVis, pgVisRect)
 		pygame.display.update()
