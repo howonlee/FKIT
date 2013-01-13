@@ -5,10 +5,27 @@ from numpy import *
 from random import randint, choice
 from math import * #pollute that namespace, baby
 from Unit import *
+from Stages import *
+from Star import *
 
 
-NUM_UNITS = 5
-NUM_CREEPS = 5
+def change_stage():
+	global currStage
+	currStage += 1
+	numUnits = STAGES[currStage]["num"]
+	currPath = STAGES[currStage]["path"]
+	currSpawn = STAGES[currStage]["spawn"]
+	currTime = STAGES[currStage]["time"]
+
+def lose_life(unit):
+	unit.die()
+	NUM_LIFE -= 1
+	if NUM_LIFE <= 0:
+		end_game()
+
+def end_game(gameoverscreen=False):
+	pygame.quit()
+	sys.exit()
 
 def draw_flow(im, flow, step=32):
 	"""Plot optical flow"""
@@ -26,6 +43,10 @@ def draw_flow(im, flow, step=32):
 	for (x1, y1), (x2, y2) in lines:
 		cv2.line(vis, (x1, y1), (x2, y2), (255, 255, 255), 1)
 	return vis
+
+def make_star():
+	global star
+	star = Star(screen, STAR_POS, "star.png")
 
 if __name__ == '__main__':
 
@@ -45,17 +66,25 @@ if __name__ == '__main__':
 
 	#game init
 	units = []
+	NUM_LIVES = 5000
+	STAR_POS = (305, 225)
+	numUnits = -1
+	currStage = -1 #start with negative one
+	currPath = []
+	currSpawn = []
+	currTime = 0
+	change_stage()
+	make_star()
+	print star
 
 	while True:
 		timePassed = fpsClock.tick(60)
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
-					pygame.quit()
-					sys.exit()
+					end_game()
 			if event.type == QUIT:
-				pygame.quit()
-				sys.exit()
+				end_game()
 		#begin actual stuff here
 		ret, im = cap.read()
 		gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
@@ -68,6 +97,7 @@ if __name__ == '__main__':
 		pgVis = pygame.transform.rotate(pgVis, 270)
 		pgVisRect = pgVis.get_rect()
 		screen.blit(pgVis, pgVisRect)
+		star.blitme()
 		for unit in units:
 			step = 4
 			top = min(unit.pos[1] + (unit.size[1] / 2), SCREEN_HEIGHT)

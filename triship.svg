@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="200"
+   height="200"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 "
+   sodipodi:docname="triship.svg"
+   inkscape:export-filename="C:\Users\Curuinor\Dropbox\Projects\fkit\triship.png"
+   inkscape:export-xdpi="13.904647"
+   inkscape:export-ydpi="13.904647">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="-59.172237"
+     inkscape:cy="57.095446"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-852.36218)">
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.65714285;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:5;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path2985"
+       sodipodi:cx="101.07143"
+       sodipodi:cy="100.71429"
+       sodipodi:rx="101.07143"
+       sodipodi:ry="101.07143"
+       d="m 202.14285,100.71429 c 0,55.8202 -45.25122,101.07142 -101.07142,101.07142 C 45.251219,201.78571 0,156.53449 0,100.71429 0,44.894079 45.251219,-0.35713959 101.07143,-0.35713959 c 55.8202,0 101.07142,45.25121859 101.07142,101.07142959 z"
+       transform="translate(0,852.36218)"
+       inkscape:export-xdpi="30.416414"
+       inkscape:export-ydpi="30.416414" />
+    <path
+       sodipodi:type="star"
+       style="opacity:1;fill:#00aad4;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:5;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path2988"
+       sodipodi:sides="3"
+       sodipodi:cx="102.85714"
+       sodipodi:cy="101.78571"
+       sodipodi:r1="109.94549"
+       sodipodi:r2="43.978195"
+       sodipodi:arg1="0.66104317"
+       sodipodi:arg2="1.7082407"
+       inkscape:flatsided="false"
+       inkscape:rounded="-2"
+       inkscape:randomized="0"
+       d="M 189.64285,169.28571 C 307.33312,17.969649 -93.057092,119.08443 96.831597,145.34917 286.72029,171.6139 -71.190857,-34.386451 1.0075671,143.19435 73.205989,320.77514 185.83312,-76.530349 68.142853,74.785714 -49.54742,226.10178 307.80969,19.141809 117.921,-7.1229206 -71.967693,-33.38765 215.79539,262.80305 143.59697,85.222259 71.398548,-92.35854 71.952584,320.60178 189.64285,169.28571 z"
+       transform="matrix(0.88661315,0,0,0.92165445,10.029551,862.71949)"
+       inkscape:transform-center-x="6.67791"
+       inkscape:transform-center-y="-19.082222"
+       inkscape:export-filename="C:\Users\Curuinor\Dropbox\Projects\fkit\triship.png"
+       inkscape:export-xdpi="11.246993"
+       inkscape:export-ydpi="11.246993" />
+  </g>
+</svg>
