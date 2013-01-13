@@ -64,7 +64,7 @@ def spawn_unit(gameState):
 	print "spawn"
 	print "currStage", gameState["currStage"]
 	print "numUnits", gameState["numUnits"]
-	units.append(Unit(screen, gameState["currStage"], choice(gameState["currSpawn"]), (0, 0), (0.1,0.1), gameState["currPath"]))
+	units.append(Unit(screen, gameState["currStage"], choice(gameState["currSpawn"]), (1, -1), 0.1, gameState["currPath"]))
 	gameState["numUnits"] -= 1
 
 
@@ -125,6 +125,8 @@ if __name__ == '__main__':
 		prev_gray = gray
 		pgVis = pygame.surfarray.make_surface(draw_flow(gray, flow))
 		pgVis = pygame.transform.rotate(pgVis, 270)
+		for points in gameState["currPath"]:
+			pygame.draw.circle(pgVis, (255, 255, 255), points, 30)
 		pgVisRect = pgVis.get_rect()
 		screen.blit(pgVis, pgVisRect)
 		star.blitme()
