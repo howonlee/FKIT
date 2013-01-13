@@ -22,14 +22,14 @@ def change_stage(gameState):
 	pygame.time.set_timer(SPAWN_EVENT, gameState["currTime"])
 
 def check_collision():
-	"""checks for collision between units and star"""
+	"""checks for collision between units and star, doesn't work"""
 	global star, units
 	for unit in units:
 		if (pygame.sprite.collide_rect(star, unit)):
-			lose_life(unit, gameState)
+			lose_life(gameState)
 
-def lose_life(unit, gameState):
-	unit.die()
+def lose_life(gameState):
+	print "lost life"
 	gameState["numLives"] -= 1
 	if gameState["numLives"] <= 0:
 		end_game()
@@ -93,6 +93,7 @@ if __name__ == '__main__':
 	gameState["currSpawn"] = []
 	gameState["currTime"] = 0
 	SPAWN_EVENT = 25
+	ATK_EVENT = 26
 	STAR_POS = (305, 225)#hardcoded cuz of 640x480.
 	change_stage(gameState)
 	make_star()
@@ -107,9 +108,11 @@ if __name__ == '__main__':
 				if (gameState["numUnits"] >= 0):
 					spawn_unit(gameState)
 				else:
-					if (len(units) == 0): #wait for them to clear stage
+					if (len([x for x in units if not x.isDead]) == 0): #wait for them to clear stage
 						change_stage(gameState)
 					print "change stage"
+			if event.type == ATK_EVENT:
+				lose_life(gameState)
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
 					end_game()

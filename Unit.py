@@ -5,6 +5,7 @@ from pygame.sprite import Sprite
 from random import randint, choice
 from vec2d import *
 
+ATK_EVENT = 26
 STAR_POS = (310, 230)
 UNITTYPES = [{"img" : "sextship.png"},
 			 {"img" : "quintship.png"},
@@ -14,6 +15,7 @@ UNITTYPES = [{"img" : "sextship.png"},
 class Unit(Sprite):
 	def __init__(self, screen, unitType, initPosition, initDirection, speed, targetList):
 		Sprite.__init__(self)
+		self.isDead = False
 		self.screen = screen
 		self.speed = speed
 		self.pos = vec2d(initPosition)
@@ -29,6 +31,7 @@ class Unit(Sprite):
 	def update(self, time_passed, flowMat):
 		"""The unit owns the flow calculations"""
 		#movement
+		if (self.isDead): return
 		self._change_direction(time_passed)
 		self._checkTarget()
 		displacement = vec2d(
@@ -52,18 +55,24 @@ class Unit(Sprite):
 		self._checkbounds()
 
 	def blitme(self):
+		if (self.isDead): return
 		draw_pos = self.image.get_rect().move(
 				self.pos.x - self.image.get_width() / 2,
 				self.pos.y - self.image.get_height() / 2)
 		self.screen.blit(self.image, draw_pos)
 
 	def die(self):
-		pass
+		"""this is a bit of a sop"""
+		if (self.isDead): return
+		self.pos = (-1000, -1000)
+		self.speed = 0
+		self.isDead = True
 
 	#private
 	_counter = 0
 
 	def _checkbounds(self):
+		if (self.isDead): return
 		self.image_w, self.image_h = self.image.get_size()
 		bounds_rect = self.screen.get_rect().inflate(
 							-self.image_w, -self.image_h)
@@ -77,14 +86,20 @@ class Unit(Sprite):
 			self.die()
 
 	def _change_direction(self, time_passed):
+		if (self.isDead): return
 		self.direction = self.currTarget - self.pos
 		self.direction = self.direction.normalized()
 
 	def _checkTarget(self):
-		if self.pos.get_distance(self.currTarget) < (self.image.get_size()[0] + 1):
+		if (self.isDead): return
+		if self.pos.get_distance(self.currTarget) < ((self.image.get_size()[0] / 2) + 1):
 			print "targetList", self.targetList
 			if (len(self.targetList) > 0):
-				self.targetList.pop(0)
 				self.currTarget = self.targetList[0]
+				self.targetList.pop(0)
 			else:
+				if (self.currTarget == STAR_POS):
+					deathEvent = pygame.event.Event(ATK_EVENT)
+					pygame.event.post(deathEvent)
+					self.die()
 				self.currTarget = STAR_POS
