@@ -8,19 +8,23 @@ from Unit import *
 from Stages import *
 from Star import *
 
+MAX_STAGES = 3
 
 def change_stage():
-	global currStage
+	global currStage, numUnits, currPath, currSpawn, currTime
 	currStage += 1
+	if currStage > MAX_STAGES:
+		end_game()
 	numUnits = STAGES[currStage]["num"]
 	currPath = STAGES[currStage]["path"]
 	currSpawn = STAGES[currStage]["spawn"]
 	currTime = STAGES[currStage]["time"]
+	pygame.time.set_timer(SPAWN_EVENT, currTime)
 
 def lose_life(unit):
 	unit.die()
-	NUM_LIFE -= 1
-	if NUM_LIFE <= 0:
+	numLives -= 1
+	if numLives <= 0:
 		end_game()
 
 def end_game(gameoverscreen=False):
@@ -65,9 +69,9 @@ if __name__ == '__main__':
 	pygame.display.set_caption("FKIT")
 
 	#game init
-	units = []
-	NUM_LIVES = 5000
-	STAR_POS = (305, 225)
+	numLives = 5000
+	SPAWN_EVENT = 25
+	STAR_POS = (305, 225)#hardcoded cuz of 640x480.
 	numUnits = -1
 	currStage = -1 #start with negative one
 	currPath = []
@@ -75,11 +79,22 @@ if __name__ == '__main__':
 	currTime = 0
 	change_stage()
 	make_star()
-	print star
+	units = []
+	pygame.time.set_timer(SPAWN_EVENT, currTime)
 
 	while True:
 		timePassed = fpsClock.tick(60)
 		for event in pygame.event.get():
+			if event.type == SPAWN_EVENT:
+				if (numUnits >= 0):
+					print "spawn"
+					print currStage
+					print numUnits
+					numUnits -= 1
+				else:
+					if (len(units) == 0): #wait for them to clear stage
+						change_stage()
+					print "change stage"
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
 					end_game()
@@ -91,8 +106,6 @@ if __name__ == '__main__':
 		gray = cv2.equalizeHist(gray)
 		flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, 0.5, 2, 3, 2, 6, 1.1, 1)
 		prev_gray = gray
-		if cv2.waitKey(10) == 27:
-			break
 		pgVis = pygame.surfarray.make_surface(draw_flow(gray, flow))
 		pgVis = pygame.transform.rotate(pgVis, 270)
 		pgVisRect = pgVis.get_rect()
