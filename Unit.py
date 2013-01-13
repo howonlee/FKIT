@@ -38,18 +38,15 @@ class Unit(Sprite):
 				self.direction.x * self.speed * time_passed,
 				self.direction.y * self.speed * time_passed)
 		self.pos += displacement
-		if displacement[0]:
-			self.rect.move(displacement[0], displacement[1])
-		#self.flow = numpy.sum(numpy.sum(flowMat, axis=0), axis=0)
-		#print self.flow
-		#acceleration
-		#self.acc += (self.flow)
-		#self.acc *= DECEL_FACTOR
-		"""self.speed += (ACC_FACTOR * self.acc)
-		if self.speed > EQUIB_POINT:
-			self.speed *= DECEL_FACTOR
-		if self.speed < EQUIB_POINT:
-			self.speed += NAT_ACCEL"""
+		self.flow = numpy.sum(numpy.sum(flowMat, axis=0), axis=0)
+		print self.flow
+		self.pos += (self.flow)
+		#self.acc *= 0.9
+		#self.speed += (0.0005 * self.acc)
+		#if self.speed > 0.1:
+		#	self.speed *= 0.9
+		#if self.speed < 0.1:
+		#	self.speed += 0.02
 		#self.pos[0] = int(self.pos[0])
 		#self.pos[1] = int(self.pos[1])
 		self._checkbounds()

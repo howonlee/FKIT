@@ -141,7 +141,7 @@ if __name__ == '__main__':
 			left = max(unit.pos[0] - (unit.size[0] / 2), 0)
 			right = min(unit.pos[0] + (unit.size[0] / 2), SCREEN_WIDTH)
 			#print top, bottom, left, right
-			flowMat = flow[bottom:top:step, left:right:step,:] * 0.1
+			flowMat = flow[bottom:top:step, left:right:step,:] * 0.06
 			#print unit.pos
 			unit.update(timePassed, flowMat)
 			unit.blitme()
